@@ -2,6 +2,7 @@ package io.futurestud.retrofit1.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,10 +36,17 @@ public class MainActivity extends AppCompatActivity {
 
         Retrofit retrofit = builder.build();
 
-        GitHubClient client = retrofit.create(GitHubClient.class);
-        Call<List<GitHubRepo>> call = client.reposForUser("fs-opensource");
+//        Log.v("TAG", retrofit.baseUrl().toString() );
 
+
+        GitHubClient client = retrofit.create(GitHubClient.class);
+
+        // 'call' >> https://api.github.com/users/{user}/repos
+        Call<List<GitHubRepo>> call = client.reposForUser("wire2coder");
+
+        // do the actual 'calling'
         call.enqueue(new Callback<List<GitHubRepo>>() {
+
             @Override
             public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
                 List<GitHubRepo> repos = response.body();
@@ -50,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "error :(", Toast.LENGTH_SHORT).show();
             }
+
         });
     }
 
